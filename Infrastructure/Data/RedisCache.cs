@@ -43,7 +43,7 @@ namespace Snowing.DDD.Infrastructure.Data
                 AbsoluteExpirationRelativeToNow = new TimeSpan(0, 20, 0),
                 SlidingExpiration = new TimeSpan(0, 20, 0),
             };
-            string connectionString = con.GetConnectionString();
+            string connectionString = con.GetConnectionString("redis");
             redis = ConnectionMultiplexer.Connect(connectionString);
             db = redis.GetDatabase();
             this.keyPrefix = typeof(T).Name + "_";
@@ -76,20 +76,28 @@ namespace Snowing.DDD.Infrastructure.Data
             TValue result = default(TValue);
             if (!string.IsNullOrEmpty(str))
             {
-                if (typeof(T).IsClass)
+                Type type = typeof(TValue);
+                if (type.IsClass)
                 {
                     JsonSerializer serializer = new JsonSerializer();
                     StringReader reader = new StringReader(str);
-                    object o = serializer.Deserialize(new JsonTextReader(reader), typeof(T));
+                    object o = serializer.Deserialize(new JsonTextReader(reader), typeof(TValue));
                     result = (TValue)o;
                 }
-                else if (typeof(TValue).Name.ToLower() == "string")
+                else if (type.Name.ToLower() == "string")
                 {
                     result =  (TValue)(object)str;
                 }
-                else if (typeof(TValue).IsValueType)
+                else if (type.IsValueType)
                 {
-                    throw new NotImplementedException("需要实现");
+                    switch (type.FullName)
+                    {
+                        case "System.UInt64":
+                            result = (TValue)(object)  Convert.ToUInt64(str);
+                            break;
+                        default:
+                            throw new NotImplementedException("需要实现");
+                    }
                 }
             }
 

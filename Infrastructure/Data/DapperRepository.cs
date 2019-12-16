@@ -20,6 +20,7 @@ namespace Snowing.DDD.Infrastructure.Data
         public DapperRepository(IConnectionProvider provider)
         {
             this.provider = provider;
+            this.curDbConnection = provider.NewConnection();
         }
 
         #region Gets

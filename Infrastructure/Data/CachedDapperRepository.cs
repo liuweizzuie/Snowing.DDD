@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Snowing.DDD.Infrastructure.Data
 {
-    class CachedDapperRepository<T> : DapperRepository<T>, ICachedRepository<T> where T : BaseEntity
+    public class CachedDapperRepository<T> : DapperRepository<T>, ICachedRepository<T> where T : BaseEntity
     {
         protected ICache<T> cache;
         protected IConnectionProvider provider;
@@ -48,6 +48,17 @@ namespace Snowing.DDD.Infrastructure.Data
                 result = this.Get(id.ToString());
             }
             return result;
+        }
+
+        public void UpdateThroughCache(T entity)
+        {
+            string key = entity.ID.ToString();
+            if (this.KeyExists(key))
+            {
+                this.cache.Set(key, entity);
+            }
+
+            this.UpdateAsync(entity);
         }
 
         #region ICache  

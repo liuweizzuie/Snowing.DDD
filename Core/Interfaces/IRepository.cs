@@ -11,6 +11,8 @@ namespace Snowing.DDD.Core.Interfaces
         bool ExistsThroughCache(ulong id);
 
         T GetThrouthCache(ulong id);
+
+        void UpdateThroughCache(T entity);
     }
 
     public interface IRepository<T>: IBaseEntityRepository<T> where T : BaseEntity
