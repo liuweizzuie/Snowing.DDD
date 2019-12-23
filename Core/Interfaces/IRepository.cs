@@ -25,7 +25,13 @@ namespace Snowing.DDD.Core.Interfaces
         int Count(ISpecification<T> spec);
     }
 
-    public interface ICache<T> where T : BaseEntity
+    public interface ICache<T>: ICacheBase where T : BaseEntity
+    {
+        T Get(string key);
+    }
+
+
+    public interface ICacheBase
     {
         /// <summary>
         /// when the value is Value-Typed, such as int, when the key doesnt exit, the Get method will return a default(T) that is 0, <br/> so we just dont know if the key exists or the value is 0. 
@@ -34,12 +40,12 @@ namespace Snowing.DDD.Core.Interfaces
         /// <returns></returns>
         bool KeyExists(string key);
 
-        T Get(string key);
-
         OtherT Get<OtherT>(string key);
 
         void Set(string key, object value);
 
         void Unset(string key);
+
+
     }
 }
