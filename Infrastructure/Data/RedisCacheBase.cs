@@ -52,7 +52,7 @@ namespace Snowing.DDD.Infrastructure.Data
 
         public OtherT Get<OtherT>(string key)
         {
-            throw new NotImplementedException();
+            return InnerGet<OtherT>(key);
         }
 
         public bool KeyExists(string key)
@@ -111,33 +111,40 @@ namespace Snowing.DDD.Infrastructure.Data
             return result;
         }
 
-        public void Set(string key, object value)
+        public void SetAsync(string key, object value)
         {
             Task.Run(() =>
             {
-                string str = string.Empty;
-                if (value.GetType().IsClass || value.GetType().Name.ToLower() == "string")
-                {
-                    str = JsonConvert.SerializeObject(value);
-                }
-                else if (value.GetType().IsValueType)
-                {
-                    str = Convert.ToString(value);
-                }
-
-                if (this.options.SlidingExpiration.HasValue)
-                {
-                    this.db.StringSet(this.keyPrefix + key, str, this.options.SlidingExpiration);
-                }
-                else if (this.options.AbsoluteExpiration.HasValue)
-                {
-                    this.db.StringSet(this.keyPrefix + key, str, this.options.AbsoluteExpiration.Value.Offset);
-                }
-                else if (this.options.AbsoluteExpirationRelativeToNow != null)
-                {
-                    this.db.StringSet(this.keyPrefix + key, str, this.options.AbsoluteExpirationRelativeToNow);
-                }
+                Set(key, value);
             });
+        }
+
+        public void Set(string key, object value)
+        {
+           
+
+            string str = string.Empty;
+            if (value.GetType().IsClass || value.GetType().Name.ToLower() == "string")
+            {
+                str = JsonConvert.SerializeObject(value);
+            }
+            else if (value.GetType().IsValueType)
+            {
+                str = Convert.ToString(value);
+            }
+
+            if (this.options.SlidingExpiration.HasValue)
+            {
+                this.db.StringSet(this.keyPrefix + key, str, this.options.SlidingExpiration);
+            }
+            else if (this.options.AbsoluteExpiration.HasValue)
+            {
+                this.db.StringSet(this.keyPrefix + key, str, this.options.AbsoluteExpiration.Value.Offset);
+            }
+            else if (this.options.AbsoluteExpirationRelativeToNow != null)
+            {
+                this.db.StringSet(this.keyPrefix + key, str, this.options.AbsoluteExpirationRelativeToNow);
+            }
 
         }
     }

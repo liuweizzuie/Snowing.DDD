@@ -17,17 +17,26 @@ namespace Snowing.DDD.Infrastructure.Data
     public class DapperRepository<T> : BaseEntityRepository<T>, IRepository<T> where T : BaseEntity
     {
         IConnectionProvider provider;
-        public DapperRepository(IConnectionProvider provider)
+        protected string ConnectionKey = string.Empty;
+        public DapperRepository(IConnectionKeyProvider keyProvider, IConnectionProvider provider)
         {
             this.provider = provider;
-            this.curDbConnection = provider.NewConnection();
+            if(keyProvider == null)
+            {
+                this.ConnectionKey = "mysql";
+            }
+            else
+            {
+                this.ConnectionKey = keyProvider.Key;
+            }
+            this.curDbConnection = provider.NewConnection(this.ConnectionKey);
         }
 
         #region Gets
         public T GetBy(ISpecification<T> spec)
         {
             T t = default(T);
-            using (IDbConnection cn = this.provider.NewConnection())
+            using (IDbConnection cn = this.provider.NewConnection(this.ConnectionKey))
             {
                 cn.Open();
                 PredicateGroup gp = SpecificationEvaluator<T>.GetQuery(spec);
@@ -44,7 +53,7 @@ namespace Snowing.DDD.Infrastructure.Data
         public T GetById(ulong id)
         {
             T t = default(T);
-            using (IDbConnection cn = this.provider.NewConnection())
+            using (IDbConnection cn = this.provider.NewConnection(this.ConnectionKey))
             {
                 cn.Open();
                 t = cn.Get<T>(id);

@@ -32,7 +32,6 @@ namespace Snowing.DDD.Core.Entities
         {
             this.Name = propertyInfo.Name;
             this.IsReadOnly = false;
-            this.Ignored = false;
             this.PropertyInfo = PropertyInfo;
             this.KeyType = KeyType.NotAKey;
             this.ColumnLength = 64;
@@ -42,6 +41,7 @@ namespace Snowing.DDD.Core.Entities
             this.IdentityType = IdentityType.Int64Unsigned;
 
             ColumnAttribute ca = propertyInfo.GetCustomAttribute<ColumnAttribute>();
+            ColumnIgnoreAttribute ignore = propertyInfo.GetCustomAttribute<ColumnIgnoreAttribute>();
             if (ca != null)
             {
                 this.ColumnName = ca.Name;
@@ -51,6 +51,8 @@ namespace Snowing.DDD.Core.Entities
             {
                 this.ColumnName = this.Name;
             }
+
+            this.Ignored = ignore != null;
         }
     }
 

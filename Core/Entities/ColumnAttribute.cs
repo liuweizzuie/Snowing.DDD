@@ -6,7 +6,7 @@ using System.Text;
 namespace Snowing.DDD.Core.Entities
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
-    public class ColumnAttribute : System.Attribute
+    public class ColumnAttribute : Attribute
     {
         public string Name { get; set; }
 
@@ -21,4 +21,6 @@ namespace Snowing.DDD.Core.Entities
             this.KeyType = KeyType.NotAKey;
         }
     }
+
+    public class ColumnIgnoreAttribute : Attribute { }
 }

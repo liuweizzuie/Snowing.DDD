@@ -11,7 +11,9 @@ namespace Snowing.DDD.Infrastructure.Data
         protected ICache<T> cache;
         protected IConnectionProvider provider;
         
-        public CachedDapperRepository(ICacheProvider cacheProvider, IConnectionProvider connProvider):base(connProvider)
+        public CachedDapperRepository(ICacheProvider cacheProvider,
+            IConnectionKeyProvider keyProvider,
+            IConnectionProvider connProvider):base(keyProvider, connProvider)
         {
             this.cache = cacheProvider.GetCache<T>();
             this.provider = connProvider;
@@ -85,6 +87,11 @@ namespace Snowing.DDD.Infrastructure.Data
         public void Unset(string key)
         {
             this.cache.Unset(key);
+        }
+
+        public void SetAsync(string key, object value)
+        {
+            this.cache.SetAsync(key, value);
         }
         #endregion
 

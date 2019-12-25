@@ -29,7 +29,7 @@ namespace Snowing.DDD.Core.Entities
                                    .Any(attr => attr.Name == columnName)
                                )
                        ),
-                    new DefaultTypeMap(typeof(T))
+                    //new DefaultTypeMap(typeof(T))
                 })
         {
         }

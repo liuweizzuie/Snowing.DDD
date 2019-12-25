@@ -44,6 +44,8 @@ namespace Snowing.DDD.Core.Interfaces
 
         void Set(string key, object value);
 
+        void SetAsync(string key, object value);
+
         void Unset(string key);
 
 
