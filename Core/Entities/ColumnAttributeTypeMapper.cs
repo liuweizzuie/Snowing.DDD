@@ -57,8 +57,6 @@ namespace Snowing.DDD.Core.Entities
             {
                 this.Properties.Add(new ColumnMap(item));
             }
-
-
         }
 
 

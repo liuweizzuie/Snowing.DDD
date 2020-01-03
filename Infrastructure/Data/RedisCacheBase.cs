@@ -62,10 +62,7 @@ namespace Snowing.DDD.Infrastructure.Data
         }
         public void Unset(string key)
         {
-            Task.Run(() =>
-            {
-                this.db.KeyDelete(this.keyPrefix + key);
-            });
+            this.db.KeyDelete(this.keyPrefix + key);
         }
 
         protected TValue InnerGet<TValue>(string key)
