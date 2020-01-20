@@ -1,25 +1,26 @@
 ﻿using Snowing.DDD.Core.Entities;
 using Snowing.DDD.Core.Interfaces;
+
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Snowing.DDD.Infrastructure.Data
 {
-    public class CachedDapperRepository<T> : DapperRepository<T>, ICachedRepository<T> where T : BaseEntity
+    public class CachedDapperRepository<T, TKey> : DapperRepository<T, TKey>, ICachedRepository<T, TKey> where T : BaseEntity<TKey> where TKey: struct
     {
-        protected ICache<T> cache;
+        protected ICache<T, TKey> cache;
         protected IConnectionProvider provider;
         
         public CachedDapperRepository(ICacheProvider cacheProvider,
             IConnectionKeyProvider keyProvider,
             IConnectionProvider connProvider):base(keyProvider, connProvider)
         {
-            this.cache = cacheProvider.GetCache<T>();
+            this.cache = cacheProvider.GetCache<T, TKey>();
             this.provider = connProvider;
         }
 
-        public bool ExistsThroughCache(ulong id)
+        public bool ExistsThroughCache(TKey id)
         {
             bool result = false;
             if (!this.cache.KeyExists(id.ToString()))
@@ -34,7 +35,7 @@ namespace Snowing.DDD.Infrastructure.Data
             return result;
         }
 
-        public T GetThrouthCache(ulong id)
+        public T GetThrouthCache(TKey id)
         {
             T result = default(T);
             if (!this.KeyExists(id.ToString()))
@@ -95,5 +96,45 @@ namespace Snowing.DDD.Infrastructure.Data
         }
         #endregion
 
+    }
+
+    public class CachedDapperRepository64<T>: CachedDapperRepository<T, Int64>, ICachedRepositoryInt64<T> where T: BaseEntityInt64
+    {
+        public CachedDapperRepository64(ICacheProvider cacheProvider,
+            IConnectionKeyProvider keyProvider,
+            IConnectionProvider connProvider):base(cacheProvider, keyProvider, connProvider)
+        {
+
+        }
+    }
+
+    public class CachedDapperRepositoryU64<T> : CachedDapperRepository<T, UInt64>, ICachedRepositoryUInt64<T> where T : BaseEntityUInt64
+    {
+        public CachedDapperRepositoryU64(ICacheProvider cacheProvider,
+            IConnectionKeyProvider keyProvider,
+            IConnectionProvider connProvider) : base(cacheProvider, keyProvider, connProvider)
+        {
+
+        }
+    }
+
+    public class CachedDapperRepository32<T> : CachedDapperRepository<T, Int32>, ICachedRepositoryInt32<T> where T : BaseEntityInt32
+    {
+        public CachedDapperRepository32(ICacheProvider cacheProvider,
+            IConnectionKeyProvider keyProvider,
+            IConnectionProvider connProvider) : base(cacheProvider, keyProvider, connProvider)
+        {
+
+        }
+    }
+
+    public class CachedDapperRepositoryU32<T> : CachedDapperRepository<T, UInt32>, ICachedRepositoryUInt32<T> where T : BaseEntityUInt32
+    {
+        public CachedDapperRepositoryU32(ICacheProvider cacheProvider,
+            IConnectionKeyProvider keyProvider,
+            IConnectionProvider connProvider) : base(cacheProvider, keyProvider, connProvider)
+        {
+
+        }
     }
 }

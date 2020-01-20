@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Snowing.DDD.Infrastructure.Data
 {
-    public class DapperRepository<T> : BaseEntityRepository<T>, IRepository<T> where T : BaseEntity
+    public class DapperRepository<T, TKey> : BaseEntityRepository<T>, IRepository<T,TKey> where T : BaseEntity<TKey> where TKey: struct
     {
         IConnectionProvider provider;
         protected string ConnectionKey = string.Empty;
@@ -39,7 +39,7 @@ namespace Snowing.DDD.Infrastructure.Data
             using (IDbConnection cn = this.provider.NewConnection(this.ConnectionKey))
             {
                 cn.Open();
-                PredicateGroup gp = SpecificationEvaluator<T>.GetQuery(spec);
+                PredicateGroup gp = SpecificationEvaluator<T, TKey>.GetQuery(spec);
                 IList<T> list = cn.GetList<T>(gp).ToList();
                 if (list.Count > 0)
                 {
@@ -50,7 +50,7 @@ namespace Snowing.DDD.Infrastructure.Data
             return t;
         }
 
-        public T GetById(ulong id)
+        public T GetById(TKey id)
         {
             T t = default(T);
             using (IDbConnection cn = this.provider.NewConnection(this.ConnectionKey))
@@ -74,7 +74,7 @@ namespace Snowing.DDD.Infrastructure.Data
             {
                 sorts.Add(Predicates.Sort(spec.OrderByDescending, false));
             }
-            PredicateGroup gp = SpecificationEvaluator<T>.GetQuery(spec);
+            PredicateGroup gp = SpecificationEvaluator<T, TKey>.GetQuery(spec);
             if (spec.IsPagingEnabled)
             {
                 list = this.GetPage(spec.Skip / BaseSpecification<T>.PageCount, BaseSpecification<T>.PageCount, sorts, gp);
@@ -90,7 +90,7 @@ namespace Snowing.DDD.Infrastructure.Data
         public int Count(ISpecification<T> spec)
         {
             int count = 0;
-            PredicateGroup gp = SpecificationEvaluator<T>.GetQuery(spec);
+            PredicateGroup gp = SpecificationEvaluator<T, TKey>.GetQuery(spec);
             count = base.Count(predicate: gp);
             return count;
         }
@@ -99,7 +99,7 @@ namespace Snowing.DDD.Infrastructure.Data
         {
             Task.Run(() => 
             {
-                base.Delete(t => t.ID == entity.ID);
+                base.Delete(t => object.Equals(t.ID, entity.ID));
             });
         }
 

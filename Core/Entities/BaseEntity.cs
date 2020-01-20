@@ -3,40 +3,60 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Reflection;
 
 namespace Snowing.DDD.Core.Entities
 {
-    public class BaseEntity
+    public class BaseEntity<T> where T: struct
     {
+        [Column("id", KeyType = KeyType.Identity, IsAutoIncrement = true, IdentityType = IdentityType.Int64Unsigned)]
+        public T ID { get; set; }
+
         public override string ToString()
         {
             return JsonConvert.SerializeObject(this);
         }
     }
 
-    public class BaseEntityUInt64: BaseEntity
+    public class BaseEntityUInt64: BaseEntity<UInt64>
     {
-        [Column("id", KeyType = KeyType.Identity, IsAutoIncrement = true, IdentityType = IdentityType.Int64Unsigned)]
-        public UInt64 ID { get; set; }
+        public BaseEntityUInt64()
+        {
+            PropertyInfo pi = this.GetType().GetProperty("ID");
+            ColumnAttribute ca  = pi.GetCustomAttribute<ColumnAttribute>();
+            ca.IdentityType = IdentityType.Int64Unsigned;
+        }
     }
 
 
-    public class BaseEntityInt64 : BaseEntity
+    public class BaseEntityInt64 : BaseEntity<Int64>
     {
-        [Column("id", KeyType = KeyType.Identity, IsAutoIncrement = true, IdentityType = IdentityType.Int64)]
-        public Int64 ID { get; set; }
+        public BaseEntityInt64()
+        {
+            PropertyInfo pi = this.GetType().GetProperty("ID");
+            ColumnAttribute ca = pi.GetCustomAttribute<ColumnAttribute>();
+            ca.IdentityType = IdentityType.Int64;
+        }
     }
 
-    public class BaseEntityUInt32 : BaseEntity
+    public class BaseEntityUInt32 : BaseEntity<UInt32>
     {
-        [Column("id", KeyType = KeyType.Identity, IsAutoIncrement = true, IdentityType = IdentityType.UInt32)]
-        public UInt32 ID { get; set; }
+        public BaseEntityUInt32()
+        {
+            PropertyInfo pi = this.GetType().GetProperty("ID");
+            ColumnAttribute ca = pi.GetCustomAttribute<ColumnAttribute>();
+            ca.IdentityType = IdentityType.UInt32;
+        }
     }
 
-    public class BaseEntityInt32 : BaseEntity
+    public class BaseEntityInt32 : BaseEntity<Int32>
     {
-        [Column("id", KeyType = KeyType.Identity, IsAutoIncrement = true, IdentityType = IdentityType.Int32)]
-        public Int32 ID { get; set; }
+        public BaseEntityInt32()
+        {
+            PropertyInfo pi = this.GetType().GetProperty("ID");
+            ColumnAttribute ca = pi.GetCustomAttribute<ColumnAttribute>();
+            ca.IdentityType = IdentityType.Int32;
+        }
     }
 
 

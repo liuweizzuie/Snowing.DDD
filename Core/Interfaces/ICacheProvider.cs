@@ -7,6 +7,6 @@ namespace Snowing.DDD.Core.Interfaces
 {
     public interface ICacheProvider
     {
-        ICache<T> GetCache<T>() where T : BaseEntity;
+        ICache<T, TKey> GetCache<T, TKey>() where T : BaseEntity<TKey> where TKey: struct;
     }
 }

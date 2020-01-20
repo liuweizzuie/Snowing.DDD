@@ -6,18 +6,24 @@ using Galaxy.Libra.DapperExtensions.EntityRepository;
 
 namespace Snowing.DDD.Core.Interfaces
 {
-    public interface ICachedRepository<T> : IRepository<T>, ICache<T> where T : BaseEntity
+    public interface ICachedRepository<T, TKey> : IRepository<T, TKey>, ICache<T, TKey> where T : BaseEntity<TKey> where TKey: struct
     {
-        bool ExistsThroughCache(ulong id);
+        bool ExistsThroughCache(TKey id);
 
-        T GetThrouthCache(ulong id);
+        T GetThrouthCache(TKey id);
 
         void UpdateThroughCache(T entity);
     }
 
-    public interface IRepository<T>: IBaseEntityRepository<T> where T : BaseEntity
+    public interface ICachedRepositoryUInt64<T> : ICachedRepository<T, UInt64> where T : BaseEntityUInt64 { }
+
+    public interface ICachedRepositoryInt64<T>: ICachedRepository<T, Int64> where T : BaseEntityInt64 { }
+    public interface ICachedRepositoryInt32<T>: ICachedRepository<T, Int32> where T : BaseEntityInt32 { }
+    public interface ICachedRepositoryUInt32<T>: ICachedRepository<T, UInt32> where T : BaseEntityUInt32 { }
+
+    public interface IRepository<T, TKey>: IBaseEntityRepository<T> where T : BaseEntity<TKey> where TKey : struct
     {
-        T GetById(ulong id);
+        T GetById(TKey id);
         T GetBy(ISpecification<T> spec);
         IReadOnlyList<T> GetList(ISpecification<T> spec);
         void UpdateAsync(T entity);
@@ -25,7 +31,7 @@ namespace Snowing.DDD.Core.Interfaces
         int Count(ISpecification<T> spec);
     }
 
-    public interface ICache<T>: ICacheBase where T : BaseEntity
+    public interface ICache<T, TKey>: ICacheBase where T : BaseEntity<TKey> where TKey : struct
     {
         T Get(string key);
     }
