@@ -22,7 +22,7 @@ namespace Snowing.DDD.Infrastructure.Data
         public bool ExistsThroughCache(ulong id)
         {
             bool result = false;
-            if (this.cache.KeyExists(id.ToString()))
+            if (!this.cache.KeyExists(id.ToString()))
             {
                 T value = this.GetById(id);
                 result = value != null;
