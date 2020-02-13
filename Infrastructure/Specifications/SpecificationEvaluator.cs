@@ -8,17 +8,13 @@ using System.Text;
 
 namespace Snowing.DDD.Infrastructure.Specifications
 {
-    public class SpecificationEvaluator<T> where T : BaseEntity
+    public class SpecificationEvaluator<T, TKey> where T : BaseEntity<TKey> where TKey: struct
     {
         public static PredicateGroup GetQuery(ISpecification<T> specification)
         {
             //var query = inputQuery;
 
             // modify the IQueryable using the specification's criteria expression
-            //if (specification.Criteria != null)
-            //{
-            //    query = query.Where(specification.Criteria);
-            //}
             PredicateGroup predicateGroup = new PredicateGroup { Operator = GroupOperator.And, Predicates = new List<IPredicate>() };
             if (specification.Criteria != null)
             {
@@ -33,6 +29,22 @@ namespace Snowing.DDD.Infrastructure.Specifications
                 predicateGroup.Predicates.Add(pr);
                 return predicateGroup;
             });
+
+            specification.Contains.Aggregate(predicateGroup, (current, include) =>
+            {
+                IPredicate pr = Predicates.Field<T>(include.Item1, Operator.Like, include.Item2);
+                predicateGroup.Predicates.Add(pr);
+                return predicateGroup;
+            });
+
+            specification.Not.Aggregate(predicateGroup, (current, include) =>
+            {
+                IPredicate pr = Predicates.Field<T>(include.Item1, Operator.Eq, include.Item2, true);
+                predicateGroup.Predicates.Add(pr);
+                return predicateGroup;
+            });
+
+
 
             //// Include any string-based include statements
             //query = specification.IncludeStrings.Aggregate(query,

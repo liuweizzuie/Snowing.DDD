@@ -9,10 +9,17 @@ namespace Snowing.DDD.Core.Interfaces
     {
         Tuple<Expression<Func<T, object>>, object> Criteria { get; }
         List<Tuple<Expression<Func<T, object>>, object>> Includes { get; }
+
+        List<Tuple<Expression<Func<T, object>>, object>> Contains { get; }
+
+        List<Tuple<Expression<Func<T, object>>, IList<object>>> Or { get; }
+
         List<string> IncludeStrings { get; }
         Expression<Func<T, object>> OrderBy { get; }
         Expression<Func<T, object>> OrderByDescending { get; }
         Expression<Func<T, object>> GroupBy { get; }
+
+        List<Tuple<Expression<Func<T, object>>, object>> Not { get; }
 
         int Take { get; }
 

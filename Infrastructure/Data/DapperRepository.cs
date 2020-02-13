@@ -11,6 +11,7 @@ using Galaxy.Libra.DapperExtensions;
 using Snowing.DDD.Infrastructure.Specifications;
 using System.Data;
 using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace Snowing.DDD.Infrastructure.Data
 {
@@ -85,6 +86,8 @@ namespace Snowing.DDD.Infrastructure.Data
             }
             return list;
         }
+
+        //public dynamic 
         #endregion
 
         public int Count(ISpecification<T> spec)
@@ -93,6 +96,13 @@ namespace Snowing.DDD.Infrastructure.Data
             PredicateGroup gp = SpecificationEvaluator<T, TKey>.GetQuery(spec);
             count = base.Count(predicate: gp);
             return count;
+        }
+
+        public dynamic Max(Expression<Func<T, object>> maxExp, ISpecification<T> spec)
+        {
+            PredicateGroup gp = SpecificationEvaluator<T, TKey>.GetQuery(spec);
+            dynamic result = base.Max(maxExp, predicate: gp);
+            return result;
         }
 
         public void DeleteAsync(T entity)

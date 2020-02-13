@@ -25,6 +25,11 @@ namespace Snowing.DDD.Infrastructure.Specifications
             return new ColumnSpecification<T>(criteria, value);
         }
 
+        public static BaseSpecification<T> ColumnSpecification()
+        {
+            return new ColumnSpecification<T>(null, null);
+        }
+
         public static BaseSpecification<T> ColumnPaginatedSpecification(Expression<Func<T, object>> criteria, object value, int pageIndex)
         {
             BaseSpecification<T> spec = new ColumnSpecification<T>(criteria, value);
@@ -38,7 +43,15 @@ namespace Snowing.DDD.Infrastructure.Specifications
         }
 
         public Tuple<Expression<Func<T, object>>, object> Criteria { get; }
-        public List<Tuple<Expression<Func<T, object>>, object>> Includes { get; } = new List<Tuple<Expression<Func<T, object>>, object>>();
+        public List<Tuple<Expression<Func<T, object>>, object>> Includes { get; } 
+            = new List<Tuple<Expression<Func<T, object>>, object>>();
+
+        public List<Tuple<Expression<Func<T, object>>, object>> Contains { get; }
+            = new List<Tuple<Expression<Func<T, object>>, object>>();
+
+        public List<Tuple<Expression<Func<T, object>>, object>> Not { get; }
+            = new List<Tuple<Expression<Func<T, object>>, object>>();
+
         public List<string> IncludeStrings { get; } = new List<string>();
         public Expression<Func<T, object>> OrderBy { get; private set; }
         public Expression<Func<T, object>> OrderByDescending { get; private set; }
@@ -47,6 +60,9 @@ namespace Snowing.DDD.Infrastructure.Specifications
         public int Take { get; private set; }
         public int Skip { get; private set; }
         public bool IsPagingEnabled { get; private set; } = false;
+
+        public List<Tuple<Expression<Func<T, object>>, IList<object>>> Or { get; set; } 
+            = new List<Tuple<Expression<Func<T, object>>, IList<object>>>();
 
         protected virtual void AddInclude(Expression<Func<T, object>> includeExpression, object value)
         {

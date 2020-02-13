@@ -3,9 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Copyright>liuweizzuie</Copyright>
-    <Version>1.0.0.27</Version>
-    <AssemblyVersion>1.0.0.27</AssemblyVersion>
-    <FileVersion>1.0.0.27</FileVersion>
+    <Version>1.0.0.39</Version>
+    <AssemblyVersion>1.0.0.39</AssemblyVersion>
+    <FileVersion>1.0.0.39</FileVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
@@ -17,7 +17,7 @@
     <PackageReference Include="Dapper" Version="2.0.30" />
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="3.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="Snowing.DapperExtensions" Version="1.0.0.9" />
+    <PackageReference Include="Snowing.DapperExtensions" Version="1.0.0.15" />
     <PackageReference Include="StackExchange.Redis" Version="2.0.601" />
   </ItemGroup>
 

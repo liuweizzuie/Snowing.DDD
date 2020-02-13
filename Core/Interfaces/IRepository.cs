@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Galaxy.Libra.DapperExtensions.EntityRepository;
+using System.Linq.Expressions;
 
 namespace Snowing.DDD.Core.Interfaces
 {
@@ -29,6 +30,8 @@ namespace Snowing.DDD.Core.Interfaces
         void UpdateAsync(T entity);
         void DeleteAsync(T entity);
         int Count(ISpecification<T> spec);
+
+        dynamic Max(Expression<Func<T, object>> maxExp, ISpecification<T> spec);
     }
 
     public interface ICache<T, TKey>: ICacheBase where T : BaseEntity<TKey> where TKey : struct
