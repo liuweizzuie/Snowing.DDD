@@ -12,6 +12,7 @@ using Snowing.DDD.Infrastructure.Specifications;
 using System.Data;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 
 namespace Snowing.DDD.Infrastructure.Data
 {
@@ -31,6 +32,17 @@ namespace Snowing.DDD.Infrastructure.Data
                 this.ConnectionKey = keyProvider.Key;
             }
             this.curDbConnection = provider.NewConnection(this.ConnectionKey);
+        }
+
+
+        public override dynamic Add(T entity)
+        {
+            dynamic result;
+            lock (this.curDbConnection)
+            {
+                result = base.Add(entity);
+            }
+            return result;
         }
 
         #region Gets

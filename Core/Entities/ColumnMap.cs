@@ -46,6 +46,7 @@ namespace Snowing.DDD.Core.Entities
             {
                 this.ColumnName = ca.Name;
                 this.KeyType = ca.KeyType;
+                this.IdentityType = ca.IdentityType;
             }
             else
             {

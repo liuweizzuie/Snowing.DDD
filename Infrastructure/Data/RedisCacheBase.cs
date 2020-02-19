@@ -118,8 +118,6 @@ namespace Snowing.DDD.Infrastructure.Data
 
         public void Set(string key, object value)
         {
-           
-
             string str = string.Empty;
             if (value.GetType().IsClass || value.GetType().Name.ToLower() == "string")
             {
@@ -142,6 +140,11 @@ namespace Snowing.DDD.Infrastructure.Data
             {
                 this.db.StringSet(this.keyPrefix + key, str, this.options.AbsoluteExpirationRelativeToNow);
             }
+
+        }
+
+        protected void TryOpenDb()
+        {
 
         }
     }

@@ -16,7 +16,7 @@ namespace Snowing.DDD.Infrastructure.Specifications
 
             // modify the IQueryable using the specification's criteria expression
             PredicateGroup predicateGroup = new PredicateGroup { Operator = GroupOperator.And, Predicates = new List<IPredicate>() };
-            if (specification.Criteria != null)
+            if (specification.Criteria != null && specification.Criteria.Item1 != null)
             {
                 IPredicate pr = Predicates.Field<T>(specification.Criteria.Item1, Operator.Eq, specification.Criteria.Item2);
                 predicateGroup.Predicates.Add(pr);
@@ -44,7 +44,17 @@ namespace Snowing.DDD.Infrastructure.Specifications
                 return predicateGroup;
             });
 
-
+            if(specification.Or.Count > 0)
+            {
+                PredicateGroup orGroup = new PredicateGroup { Operator = GroupOperator.Or, Predicates = new List<IPredicate>() };
+                specification.Or.Aggregate(predicateGroup, (current, include) =>
+                {
+                    IPredicate pr = Predicates.Field<T>(include.Item1, Operator.Eq, include.Item2);
+                    orGroup.Predicates.Add(pr);
+                    return orGroup;
+                });
+                predicateGroup.Predicates.Add(orGroup);
+            }
 
             //// Include any string-based include statements
             //query = specification.IncludeStrings.Aggregate(query,

@@ -24,7 +24,7 @@ namespace Snowing.DDD.Core.Entities
                        typeof(T),
                        (type, columnName) =>
                            type.GetProperties().FirstOrDefault(prop =>
-                               prop.GetCustomAttributes(false)
+                               prop.GetCustomAttributes(true)
                                    .OfType<ColumnAttribute>()
                                    .Any(attr => attr.Name == columnName)
                                )
