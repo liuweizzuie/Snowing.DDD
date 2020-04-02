@@ -14,6 +14,7 @@ namespace Snowing.DDD.Infrastructure.Specifications
     {
         public const int PageCount = 20;
 
+        #region static
         /// <summary>
         /// 根据某列查询
         /// </summary>
@@ -36,10 +37,15 @@ namespace Snowing.DDD.Infrastructure.Specifications
             spec.ApplyPaging(PageCount * pageIndex, PageCount);
             return spec;
         }
+        #endregion
+
 
         protected BaseSpecification(Expression<Func<T, object>> criteria, object value)
         {
-            Criteria = new Tuple<Expression<Func<T, object>>, object>(criteria, value);
+            if(criteria != null)
+            {
+                Criteria = new Tuple<Expression<Func<T, object>>, object>(criteria, value);
+            }
         }
 
         public Tuple<Expression<Func<T, object>>, object> Criteria { get; }
@@ -61,8 +67,8 @@ namespace Snowing.DDD.Infrastructure.Specifications
         public int Skip { get; private set; }
         public bool IsPagingEnabled { get; private set; } = false;
 
-        public List<Tuple<Expression<Func<T, object>>, IList<object>>> Or { get; set; } 
-            = new List<Tuple<Expression<Func<T, object>>, IList<object>>>();
+        public List<Tuple<Expression<Func<T, object>>, object>> Or { get; set; } 
+            = new List<Tuple<Expression<Func<T, object>>, object>>();
 
         protected virtual void AddInclude(Expression<Func<T, object>> includeExpression, object value)
         {

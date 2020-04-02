@@ -75,21 +75,26 @@ namespace Snowing.DDD.Infrastructure.Data
             return t;
         }
 
-        public IReadOnlyList<T> GetList(ISpecification<T> spec=null)
+        public IList<T> GetList(ISpecification<T> spec=null)
         {
-            IReadOnlyList<T> list = new List<T>();
-            IList<ISort> sorts = new List<ISort>();
-            if (spec.OrderBy != null)
-            {
-                sorts.Add(Predicates.Sort(spec.OrderBy));
-            }
-            else if (spec.OrderByDescending != null)
-            {
-                sorts.Add(Predicates.Sort(spec.OrderByDescending, false));
-            }
+            IList<T> list = new List<T>();
             PredicateGroup gp = SpecificationEvaluator<T, TKey>.GetQuery(spec);
             if (spec.IsPagingEnabled)
             {
+                IList<ISort> sorts = new List<ISort>();
+                if (spec.OrderBy != null)
+                {
+                    sorts.Add(Predicates.Sort(spec.OrderBy));
+                }
+                else if (spec.OrderByDescending != null)
+                {
+                    sorts.Add(Predicates.Sort(spec.OrderByDescending, false));
+                }
+
+                if (sorts.Count == 0)
+                {
+                    sorts.Add(new Sort() { PropertyName = "ID" });
+                }
                 list = this.GetPage(spec.Skip / BaseSpecification<T>.PageCount, BaseSpecification<T>.PageCount, sorts, gp);
             }
             else
@@ -99,7 +104,20 @@ namespace Snowing.DDD.Infrastructure.Data
             return list;
         }
 
-        //public dynamic 
+        public List<T> GetPage(int page, int resultsPerPage)
+        {
+            return base.GetPage(page, resultsPerPage,
+                new List<ISort>() { new Sort() { Ascending = true, PropertyName = "ID" } });
+        }
+
+        public List<T> GetPage(int page, int resultsPerPage, string orderBy, Func<string, Expression<Func<T, object>>> map, bool desc = false)
+        {
+            PagedSpecification<T> spec = new PagedSpecification<T>(map);
+            spec.ApplyOrderBy(orderBy, desc);
+            spec.Apply(page * resultsPerPage, resultsPerPage);
+            return base.GetPage(page, resultsPerPage, new List<ISort>() { SpecificationEvaluator<T, TKey>.GetSort(spec) });
+        }
+
         #endregion
 
         public int Count(ISpecification<T> spec)

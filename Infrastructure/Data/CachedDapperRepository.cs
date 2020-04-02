@@ -22,8 +22,8 @@ namespace Snowing.DDD.Infrastructure.Data
 
         public bool ExistsThroughCache(TKey id)
         {
-            bool result = false;
-            if (!this.cache.KeyExists(id.ToString()))
+            bool result = this.cache.KeyExists(id.ToString());
+            if (!result)
             {
                 T value = this.GetById(id);
                 result = value != null;
@@ -61,7 +61,8 @@ namespace Snowing.DDD.Infrastructure.Data
                 this.cache.Set(key, entity);
             }
 
-            this.UpdateAsync(entity);
+            //this.UpdateAsync(entity);
+            this.Update(entity);
         }
 
         #region ICache  

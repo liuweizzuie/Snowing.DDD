@@ -91,6 +91,9 @@ namespace Snowing.DDD.Infrastructure.Data
                         case "System.UInt64":
                             result = (TValue)(object)Convert.ToUInt64(str);
                             break;
+                        case "System.Int64":
+                            result = (TValue)(object)Convert.ToInt64(str);
+                            break;
                         default:
                             throw new NotImplementedException("需要实现");
                     }

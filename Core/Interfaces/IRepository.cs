@@ -26,7 +26,12 @@ namespace Snowing.DDD.Core.Interfaces
     {
         T GetById(TKey id);
         T GetBy(ISpecification<T> spec);
-        IReadOnlyList<T> GetList(ISpecification<T> spec);
+        IList<T> GetList(ISpecification<T> spec);
+
+        List<T> GetPage(int page, int resultsPerPage);
+
+        List<T> GetPage(int page, int resultsPerPage, string orderBy, Func<string, Expression<Func<T, object>>> map, bool desc = false);
+
         void UpdateAsync(T entity);
         void DeleteAsync(T entity);
         int Count(ISpecification<T> spec);

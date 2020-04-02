@@ -61,11 +61,7 @@ namespace Snowing.DDD.Infrastructure.Specifications
             //                        (current, include) => current.Include(include));
 
             // Apply ordering if expressions are set
-            //if (specification.OrderBy != null)
-            //{
-            //    //predicateGroup.Predicates.Where()
-            //    //query = query.OrderBy(specification.OrderBy);
-            //}
+            
             //else if (specification.OrderByDescending != null)
             //{
             //    query = query.OrderByDescending(specification.OrderByDescending);
@@ -89,6 +85,19 @@ namespace Snowing.DDD.Infrastructure.Specifications
             }
             //return query;
             return predicateGroup;
+        }
+
+        public static ISort GetSort(ISpecification<T> specification)
+        {
+            if (specification.OrderBy != null)
+            {
+                return new ExpressionSort<T>(specification.OrderBy) { Ascending = true };
+            } else if(specification.OrderByDescending != null)
+            {
+                return new ExpressionSort<T>(specification.OrderByDescending) { Ascending = false };
+            }
+
+            return new Sort() { PropertyName = "ID", Ascending = true };
         }
     }
 }

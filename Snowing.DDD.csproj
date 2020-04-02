@@ -3,9 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Copyright>liuweizzuie</Copyright>
-    <Version>1.0.0.48</Version>
-    <AssemblyVersion>1.0.0.48</AssemblyVersion>
-    <FileVersion>1.0.0.48</FileVersion>
+    <Version>1.0.0.61</Version>
+    <AssemblyVersion>1.0.0.61</AssemblyVersion>
+    <FileVersion>1.0.0.61</FileVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 

@@ -12,7 +12,7 @@ namespace Snowing.DDD.Core.Interfaces
 
         List<Tuple<Expression<Func<T, object>>, object>> Contains { get; }
 
-        List<Tuple<Expression<Func<T, object>>, IList<object>>> Or { get; }
+        List<Tuple<Expression<Func<T, object>>, object>> Or { get; }
 
         List<string> IncludeStrings { get; }
         Expression<Func<T, object>> OrderBy { get; }
