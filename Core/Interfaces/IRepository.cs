@@ -30,7 +30,7 @@ namespace Snowing.DDD.Core.Interfaces
 
         List<T> GetPage(int page, int resultsPerPage);
 
-        List<T> GetPage(int page, int resultsPerPage, string orderBy, Func<string, Expression<Func<T, object>>> map, bool desc = false);
+        List<T> GetPage(int page, int resultsPerPage, string orderBy, Func<string, Expression<Func<T, object>>> map, bool desc = false, ISpecification<T> spec = null);
 
         void UpdateAsync(T entity);
         void DeleteAsync(T entity);
