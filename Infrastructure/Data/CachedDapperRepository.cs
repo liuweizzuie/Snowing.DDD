@@ -61,7 +61,7 @@ namespace Snowing.DDD.Infrastructure.Data
                 this.cache.Set(key, entity);
             }
 
-            //this.UpdateAsync(entity);
+            //this.UpdateAsync(entity); //异步更新失败
             this.Update(entity);
         }
 

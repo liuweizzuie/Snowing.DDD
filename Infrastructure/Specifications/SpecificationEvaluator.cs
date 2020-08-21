@@ -61,10 +61,17 @@ namespace Snowing.DDD.Infrastructure.Specifications
             //                        (current, include) => current.Include(include));
 
             // Apply ordering if expressions are set
-            
+
+            //if (specification.OrderBy != null)
+            //{ 
+            //    PredicateGroup orGroup = new PredicateGroup { , Predicates = new List<IPredicate>() };
+            //    predicateGroup.Predicates.Add(orGroup);
+            //}
             //else if (specification.OrderByDescending != null)
             //{
-            //    query = query.OrderByDescending(specification.OrderByDescending);
+            //    PredicateGroup orGroup = new PredicateGroup { Operator = GroupOperator.Or, Predicates = new List<IPredicate>() };
+            //    //query = query.OrderByDescending(specification.OrderByDescending);
+            //    predicateGroup.Predicates.Add(orGroup);
             //}
 
             //if (specification.GroupBy != null)

@@ -110,12 +110,22 @@ namespace Snowing.DDD.Infrastructure.Data
                 new List<ISort>() { new Sort() { Ascending = true, PropertyName = "ID" } });
         }
 
-        public List<T> GetPage(int page, int resultsPerPage, string orderBy, Func<string, Expression<Func<T, object>>> map, bool desc = false)
+        public List<T> GetPage(int page, int resultsPerPage, string orderBy, Func<string, Expression<Func<T, object>>> map, bool desc = false, ISpecification<T> spec = null)
         {
-            PagedSpecification<T> spec = new PagedSpecification<T>(map);
-            spec.ApplyOrderBy(orderBy, desc);
-            spec.Apply(page * resultsPerPage, resultsPerPage);
-            return base.GetPage(page, resultsPerPage, new List<ISort>() { SpecificationEvaluator<T, TKey>.GetSort(spec) });
+            PagedSpecification<T> spec1 = new PagedSpecification<T>(map);
+            spec1.ApplyOrderBy(orderBy, desc);
+            spec1.Apply(page * resultsPerPage, resultsPerPage);
+            if(spec == null)
+            {
+                return base.GetPage(page, resultsPerPage,
+                                new List<ISort>() { SpecificationEvaluator<T, TKey>.GetSort(spec1) });
+            }
+            else
+            {
+                return base.GetPage(page, resultsPerPage,
+                new List<ISort>() { SpecificationEvaluator<T, TKey>.GetSort(spec1) },
+                SpecificationEvaluator<T, TKey>.GetQuery(spec));
+            }
         }
 
         #endregion
