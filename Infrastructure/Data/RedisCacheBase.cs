@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
+﻿using CSRedis;
+using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 using Snowing.DDD.Core.Interfaces;
-using StackExchange.Redis;
+//using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,8 +14,9 @@ namespace Snowing.DDD.Infrastructure.Data
     public class RedisCacheBase : ICacheBase
     {
         protected readonly DistributedCacheEntryOptions options;
-        protected readonly ConnectionMultiplexer redis;
-        protected readonly IDatabase db;
+        //protected readonly ConnectionMultiplexer redis;
+        //protected readonly IDatabase db;
+        protected readonly CSRedisClient rclient;
         protected string keyPrefix { get; set; }
 
         #region .ctor
@@ -43,8 +45,9 @@ namespace Snowing.DDD.Infrastructure.Data
                 SlidingExpiration = new TimeSpan(0, 20, 0),
             };
             string connectionString = con.GetConnectionString("redis");
-            redis = ConnectionMultiplexer.Connect(connectionString);
-            db = redis.GetDatabase();
+            rclient = new CSRedisClient(connectionString);
+            //redis = ConnectionMultiplexer.Connect(connectionString);
+            //db = redis.GetDatabase();
             this.keyPrefix = string.Empty;
         }
 
@@ -57,17 +60,17 @@ namespace Snowing.DDD.Infrastructure.Data
 
         public bool KeyExists(string key)
         {
-            string str = this.db.StringGet(this.keyPrefix + key);
+            string str = this.rclient.Get(this.keyPrefix + key);
             return !string.IsNullOrEmpty(str);
         }
         public void Unset(string key)
         {
-            this.db.KeyDelete(this.keyPrefix + key);
+            this.rclient.Del(key);
         }
 
         protected TValue InnerGet<TValue>(string key)
         {
-            string str = this.db.StringGet(this.keyPrefix + key);
+            string str = this.rclient.Get(this.keyPrefix + key);
             TValue result = default(TValue);
             if (!string.IsNullOrEmpty(str))
             {
@@ -104,7 +107,7 @@ namespace Snowing.DDD.Infrastructure.Data
             {
                 Task.Run(() =>
                 {
-                    this.db.StringSet(this.keyPrefix + key, str, this.options.SlidingExpiration);
+                    this.rclient.Set(this.keyPrefix + key, str, (int)this.options.SlidingExpiration.Value.TotalSeconds);
                 });
             }
 
@@ -119,8 +122,9 @@ namespace Snowing.DDD.Infrastructure.Data
             });
         }
 
-        public void Set(string key, object value)
+        public bool Set(string key, object value)
         {
+            bool result = false;
             string str = string.Empty;
             if (value.GetType().IsClass || value.GetType().Name.ToLower() == "string")
             {
@@ -133,16 +137,18 @@ namespace Snowing.DDD.Infrastructure.Data
 
             if (this.options.SlidingExpiration.HasValue)
             {
-                this.db.StringSet(this.keyPrefix + key, str, this.options.SlidingExpiration);
+                result = this.rclient.Set(this.keyPrefix + key, str, 
+                    (int)this.options.SlidingExpiration.Value.TotalSeconds);
             }
             else if (this.options.AbsoluteExpiration.HasValue)
             {
-                this.db.StringSet(this.keyPrefix + key, str, this.options.AbsoluteExpiration.Value.Offset);
+                result = this.rclient.Set(this.keyPrefix + key, str, (int)this.options.AbsoluteExpiration.Value.Offset.TotalSeconds);
             }
             else if (this.options.AbsoluteExpirationRelativeToNow != null)
             {
-                this.db.StringSet(this.keyPrefix + key, str, this.options.AbsoluteExpirationRelativeToNow);
+                result = this.rclient.Set(this.keyPrefix + key, str, (int) this.options.AbsoluteExpirationRelativeToNow.Value.TotalSeconds);
             }
+            return result;
 
         }
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using Snowing.DDD.Core.Interfaces;
 using Snowing.DDD.Core.Entities;
-using StackExchange.Redis;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 using System.IO;

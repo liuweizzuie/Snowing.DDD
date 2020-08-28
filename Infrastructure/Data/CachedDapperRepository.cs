@@ -81,9 +81,9 @@ namespace Snowing.DDD.Infrastructure.Data
             return this.cache.KeyExists(key);
         }
 
-        public void Set(string key, object value)
+        public bool Set(string key, object value)
         {
-            this.cache.Set(key, value);
+            return this.cache.Set(key, value);
         }
 
         public void Unset(string key)

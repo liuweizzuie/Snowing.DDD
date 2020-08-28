@@ -56,7 +56,7 @@ namespace Snowing.DDD.Core.Interfaces
 
         OtherT Get<OtherT>(string key);
 
-        void Set(string key, object value);
+        bool Set(string key, object value);
 
         void SetAsync(string key, object value);
 
