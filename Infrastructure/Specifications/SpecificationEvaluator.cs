@@ -56,6 +56,21 @@ namespace Snowing.DDD.Infrastructure.Specifications
                 predicateGroup.Predicates.Add(orGroup);
             }
 
+            if (specification.AndOrs.Count > 0)
+            {
+                specification.AndOrs.ForEach(ao => 
+                {
+                    PredicateGroup orGroup = new PredicateGroup { Operator = GroupOperator.Or, Predicates = new List<IPredicate>() };
+                    ao.Aggregate(predicateGroup, (current, include) =>
+                    {
+                        IPredicate pr = Predicates.Field<T>(include.Item1, Operator.Eq, include.Item2);
+                        orGroup.Predicates.Add(pr);
+                        return orGroup;
+                    });
+                    predicateGroup.Predicates.Add(orGroup);
+                });
+            }
+
             //// Include any string-based include statements
             //query = specification.IncludeStrings.Aggregate(query,
             //                        (current, include) => current.Include(include));

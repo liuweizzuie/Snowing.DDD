@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Snowing.DDD.Infrastructure.Data
 {
-    public class RedisCacheBase : ICacheBase
+    public class RedisCacheBase : ICacheBase, IDisposable
     {
         protected readonly DistributedCacheEntryOptions options;
         protected readonly ConnectionMultiplexer redis;
@@ -46,8 +46,17 @@ namespace Snowing.DDD.Infrastructure.Data
             };
             string connectionString = con.GetConnectionString("redis");
             //rclient = new CSRedisClient(connectionString);
+            //ConfigurationOptions config = new ConfigurationOptions()
+            //{
+            //    AbortOnConnectFail 
+            //}
+            //ConfigurationOptions config = ConfigurationOptions.Parse(connectionString);
+            //config.ConnectTimeout = 60;
+            //config.
             redis = ConnectionMultiplexer.Connect(connectionString);
+            //redis.
             db = redis.GetDatabase();
+            
             this.keyPrefix = string.Empty;
         }
 
@@ -152,9 +161,9 @@ namespace Snowing.DDD.Infrastructure.Data
 
         }
 
-        protected void TryOpenDb()
+        public void Dispose()
         {
-
+            this.redis.Close();
         }
     }
 }

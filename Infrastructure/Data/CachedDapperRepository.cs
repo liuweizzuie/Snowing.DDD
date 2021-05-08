@@ -1,6 +1,5 @@
 ﻿using Snowing.DDD.Core.Entities;
 using Snowing.DDD.Core.Interfaces;
-
 using System;
 using System.Collections.Generic;
 using System.Text;

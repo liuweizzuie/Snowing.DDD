@@ -14,6 +14,8 @@ namespace Snowing.DDD.Core.Interfaces
 
         List<Tuple<Expression<Func<T, object>>, object>> Or { get; }
 
+        List<IList<Tuple<Expression<Func<T, object>>, object>>> AndOrs { get; }
+
         List<string> IncludeStrings { get; }
         Expression<Func<T, object>> OrderBy { get; }
         Expression<Func<T, object>> OrderByDescending { get; }
