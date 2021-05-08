@@ -13,7 +13,6 @@ namespace Snowing.DDD.Infrastructure.Specifications
         public static PredicateGroup GetQuery(ISpecification<T> specification)
         {
             //var query = inputQuery;
-
             // modify the IQueryable using the specification's criteria expression
             PredicateGroup predicateGroup = new PredicateGroup { Operator = GroupOperator.And, Predicates = new List<IPredicate>() };
             if (specification.Criteria != null && specification.Criteria.Item1 != null)
@@ -44,7 +43,14 @@ namespace Snowing.DDD.Infrastructure.Specifications
                 return predicateGroup;
             });
 
-            if(specification.Or.Count > 0)
+            specification.Likes.Aggregate(predicateGroup, (current, likes) =>
+            {
+                IPredicate pr = Predicates.Field<T>(likes.Item1, Operator.Like, "%" + likes.Item2 + "%", false);
+                predicateGroup.Predicates.Add(pr);
+                return predicateGroup;
+            });
+
+            if (specification.Or.Count > 0)
             {
                 PredicateGroup orGroup = new PredicateGroup { Operator = GroupOperator.Or, Predicates = new List<IPredicate>() };
                 specification.Or.Aggregate(predicateGroup, (current, include) =>

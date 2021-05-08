@@ -61,6 +61,10 @@ namespace Snowing.DDD.Infrastructure.Specifications
         public List<Tuple<Expression<Func<T, object>>, object>> Or { get; }
             = new List<Tuple<Expression<Func<T, object>>, object>>();
 
+        public List<Tuple<Expression<Func<T, object>>, object>> Likes { get; }
+            = new List<Tuple<Expression<Func<T, object>>, object>>();
+
+
         public List<string> IncludeStrings { get; } = new List<string>();
         public Expression<Func<T, object>> OrderBy { get; private set; }
         public Expression<Func<T, object>> OrderByDescending { get; private set; }
