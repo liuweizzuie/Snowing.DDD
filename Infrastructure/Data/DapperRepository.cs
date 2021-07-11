@@ -145,6 +145,13 @@ namespace Snowing.DDD.Infrastructure.Data
             return result;
         }
 
+        public dynamic Sum(Expression<Func<T, object>> maxExp, ISpecification<T> spec)
+        {
+            PredicateGroup gp = SpecificationEvaluator<T, TKey>.GetQuery(spec);
+            dynamic result = base.Sum(maxExp, predicate: gp);
+            return result;
+        }
+
         public void DeleteAsync(T entity)
         {
             Task.Run(() => 

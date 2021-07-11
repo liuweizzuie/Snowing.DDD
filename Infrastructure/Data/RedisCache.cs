@@ -9,7 +9,7 @@ using System.IO;
 using System.Threading.Tasks;
 
 namespace Snowing.DDD.Infrastructure.Data
-{
+{ 
     public class RedisCache<T, TKey> : RedisCacheBase, ICache<T, TKey> where T : BaseEntity<TKey> where TKey : struct
     {
         #region .ctor

@@ -117,7 +117,6 @@ namespace Snowing.DDD.Core.Entities
             return null;
         }
 
-
         public ConstructorInfo FindExplicitConstructor()
         {
             return _mappers

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Snowing.DDD.Infrastructure.Data
 {
     public class RedisCacheBase : ICacheBase, IDisposable
-    {
+    {  
         protected readonly DistributedCacheEntryOptions options;
         protected readonly ConnectionMultiplexer redis;
         protected readonly IDatabase db;
@@ -22,7 +22,7 @@ namespace Snowing.DDD.Infrastructure.Data
         #region .ctor
         public RedisCacheBase(IConnectionStringProvier con) : this(con, null)
         {
-
+             
         }
 
         public RedisCacheBase(IConnectionStringProvier con, DateTime absoluteExpired) :

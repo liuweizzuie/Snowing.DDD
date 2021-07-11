@@ -37,6 +37,7 @@ namespace Snowing.DDD.Core.Interfaces
         int Count(ISpecification<T> spec);
 
         dynamic Max(Expression<Func<T, object>> maxExp, ISpecification<T> spec);
+        dynamic Sum(Expression<Func<T, object>> maxExp, ISpecification<T> spec);
     }
 
     public interface ICache<T, TKey>: ICacheBase where T : BaseEntity<TKey> where TKey : struct
