@@ -64,6 +64,14 @@ namespace Snowing.DDD.Infrastructure.Data
             this.Update(entity);
         }
 
+        public dynamic AddThroughCache(T entity)
+        {
+            dynamic id = base.Add(entity);
+            this.Set(id.ToString(), entity);
+            return id;
+        }
+
+
         #region ICache  
         public T Get(string key)
         {
@@ -116,6 +124,8 @@ namespace Snowing.DDD.Infrastructure.Data
         {
 
         }
+
+        
     }
 
     public class CachedDapperRepository32<T> : CachedDapperRepository<T, Int32>, ICachedRepositoryInt32<T> where T : BaseEntityInt32

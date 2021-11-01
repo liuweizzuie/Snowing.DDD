@@ -14,9 +14,16 @@ namespace Snowing.DDD.Core.Interfaces
         T GetThrouthCache(TKey id);
 
         void UpdateThroughCache(T entity);
+
+        dynamic AddThroughCache(T entity);
+
+
     }
 
-    public interface ICachedRepositoryUInt64<T> : ICachedRepository<T, UInt64> where T : BaseEntityUInt64 { }
+    public interface ICachedRepositoryUInt64<T> : ICachedRepository<T, UInt64> where T : BaseEntityUInt64 
+    {
+        
+    }
 
     public interface ICachedRepositoryInt64<T>: ICachedRepository<T, Int64> where T : BaseEntityInt64 { }
     public interface ICachedRepositoryInt32<T>: ICachedRepository<T, Int32> where T : BaseEntityInt32 { }

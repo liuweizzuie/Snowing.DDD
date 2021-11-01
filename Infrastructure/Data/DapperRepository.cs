@@ -45,6 +45,7 @@ namespace Snowing.DDD.Infrastructure.Data
             return result;
         }
 
+
         #region Gets
         public T GetBy(ISpecification<T> spec)
         {
