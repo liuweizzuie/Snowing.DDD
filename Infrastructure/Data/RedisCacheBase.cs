@@ -20,24 +20,24 @@ namespace Snowing.DDD.Infrastructure.Data
         protected string keyPrefix { get; set; }
 
         #region .ctor
-        public RedisCacheBase(IConnectionStringProvier con) : this(con, null)
+        public RedisCacheBase(IRedisConnectionProvider con) : this(con, null)
         {
              
         }
 
-        public RedisCacheBase(IConnectionStringProvier con, DateTime absoluteExpired) :
+        public RedisCacheBase(IRedisConnectionProvider con, DateTime absoluteExpired) :
             this(con, new DistributedCacheEntryOptions() { AbsoluteExpiration = absoluteExpired })
         {
 
         }
 
-        public RedisCacheBase(IConnectionStringProvier con, TimeSpan slidingExpiration) :
+        public RedisCacheBase(IRedisConnectionProvider con, TimeSpan slidingExpiration) :
             this(con, new DistributedCacheEntryOptions() { SlidingExpiration = slidingExpiration })
         {
 
         }
 
-        protected RedisCacheBase(IConnectionStringProvier con, DistributedCacheEntryOptions options)
+        protected RedisCacheBase(IRedisConnectionProvider con, DistributedCacheEntryOptions options)
         {
             this.options = options ?? new DistributedCacheEntryOptions()
             {
@@ -55,7 +55,7 @@ namespace Snowing.DDD.Infrastructure.Data
             //config.
             redis = ConnectionMultiplexer.Connect(connectionString);
             //redis.
-            db = redis.GetDatabase();
+            db = redis.GetDatabase(con.DB);
             
             this.keyPrefix = string.Empty;
         }
