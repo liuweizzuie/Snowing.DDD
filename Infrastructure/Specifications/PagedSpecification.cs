@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Snowing.DDD.Core.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 
 namespace Snowing.DDD.Infrastructure.Specifications
 {
-    public class PagedSpecification<T>: BaseSpecification<T>
+    public class PagedSpecification<T>: BaseSpecification<T>, IPagedSpecification<T>
     {
         protected Func<string, Expression<Func<T, object>>> map;
 

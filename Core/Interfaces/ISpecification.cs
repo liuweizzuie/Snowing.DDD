@@ -25,6 +25,8 @@ namespace Snowing.DDD.Core.Interfaces
 
         List<Tuple<Expression<Func<T, object>>, object>> Not { get; }
 
+        void AddInclude(Expression<Func<T, object>> predirect, object value);
+
         int Take { get; }
 
         int Skip { get; }

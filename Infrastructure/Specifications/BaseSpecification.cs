@@ -77,7 +77,8 @@ namespace Snowing.DDD.Infrastructure.Specifications
         public List<IList<Tuple<Expression<Func<T, object>>, object>>> AndOrs { get; set; } 
             = new List<IList<Tuple<Expression<Func<T, object>>, object>>>();
 
-        protected virtual void AddInclude(Expression<Func<T, object>> includeExpression, object value)
+
+        public virtual void AddInclude(Expression<Func<T, object>> includeExpression, object value)
         {
             Includes.Add(new Tuple<Expression<Func<T, object>>, object>(includeExpression, value));
         }
@@ -107,6 +108,8 @@ namespace Snowing.DDD.Infrastructure.Specifications
         {
             GroupBy = groupByExpression;
         }
+
+
 
     }
 }

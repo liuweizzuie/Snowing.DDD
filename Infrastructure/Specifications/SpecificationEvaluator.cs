@@ -109,7 +109,7 @@ namespace Snowing.DDD.Infrastructure.Specifications
 
             if (specification.IsPagingEnabled)
             {
-
+                
             }
             //return query;
             return predicateGroup;
