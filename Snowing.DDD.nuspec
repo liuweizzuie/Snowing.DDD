@@ -17,10 +17,10 @@
 	<dependencies>
 	  <group targetFramework=".NETStandard2.0" />
 	  <group>
-      <dependency id="Dapper" version="2.0.90" />
+      <dependency id="Dapper" version="2.0.130" />
       <dependency id="Microsoft.Extensions.Caching.Abstractions" version="5.0.0" />
       <dependency id="Newtonsoft.Json" version="13.0.1" />
-      <dependency id="Snowing.DapperExtensions" version="1.0.0.26" />
+      <dependency id="Snowing.DapperExtensions" version="1.0.0.30" />
       <dependency id="StackExchange.Redis" version="2.2.50" />
 	  </group>
 	</dependencies>
